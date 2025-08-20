@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -193,9 +194,10 @@ public class TelemetryService {
         );
     }
     
+    @Transactional
     public Map<String, Object> cleanupOldTraces(int olderThanDays) {
         LocalDateTime cutoffDate = LocalDateTime.now().minusDays(olderThanDays);
-        long deletedCount = traceEventRepository.deleteByTimestampBefore(cutoffDate);
+        int deletedCount = traceEventRepository.deleteByTimestampBefore(cutoffDate);
         
         return Map.of(
             "deletedEvents", deletedCount,

@@ -25,7 +25,7 @@ public interface TraceEventRepository extends JpaRepository<TraceEvent, Long> {
     @Query("SELECT DISTINCT te.operation FROM TraceEvent te WHERE te.serviceName = :serviceName ORDER BY te.operation")
     List<String> findDistinctOperationsByServiceName(@Param("serviceName") String serviceName);
     
-    @Query("SELECT DISTINCT te.traceId FROM TraceEvent te ORDER BY MAX(te.timestamp) DESC")
+    @Query("SELECT DISTINCT te.traceId FROM TraceEvent te")
     List<String> findDistinctTraceIds(PageRequest pageRequest);
     
     @Query("SELECT COUNT(te) FROM TraceEvent te WHERE te.timestamp > :since")
@@ -34,7 +34,7 @@ public interface TraceEventRepository extends JpaRepository<TraceEvent, Long> {
     @Modifying
     @Transactional
     @Query("DELETE FROM TraceEvent te WHERE te.timestamp < :cutoffDate")
-    long deleteByTimestampBefore(@Param("cutoffDate") LocalDateTime cutoffDate);
+    int deleteByTimestampBefore(@Param("cutoffDate") LocalDateTime cutoffDate);
     
     List<TraceEvent> findByStatus(TraceEvent.Status status);
     
