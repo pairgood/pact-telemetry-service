@@ -1,0 +1,2 @@
+# This directory will contain Pact consumer contract tests
+# when external service dependencies are added to the telemetry service
